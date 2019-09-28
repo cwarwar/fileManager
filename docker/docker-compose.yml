@@ -1,0 +1,29 @@
+version: '2.1'
+
+services:
+  movies:
+    image: movies
+    build: .
+    depends_on:
+     - pureftpd
+    volumes:
+      - ../:/app
+    ports:
+      - 8888:5000
+    entrypoint:
+      - flask
+      - run
+      - --host=0.0.0.0
+    environment:
+      FLASK_DEBUG: 1
+      FLASK_APP: ./movies.py
+  pureftpd:
+    build: pureftpd
+    container_name: pureftpd
+    ports:
+      - "21:21"
+    volumes:
+      - ./data/ftpuser:/home/ftpuser
+      - ./data/pure-ftpd:/etc/pure-ftpd
+    privileged: true
+    restart: always
