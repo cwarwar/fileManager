@@ -11,5 +11,6 @@ def step_impl(context):
 @then('Tente copiar para um diretório e receba um erro')
 def step_impl(context):
     payload = {'source' : context.file, 'destination' : '/primeiro/segundo/terceiro'}
-    response = requests.postconstants(constants.ENDPOINT+'movies/copy', data=payload)
+    response = requests.post(constants.ENDPOINT+'file/copy', data=payload)
+    print(response)
     assert response.json()['success'] is False

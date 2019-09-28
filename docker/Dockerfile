@@ -8,7 +8,7 @@ FROM python:3
 # If you prefer miniconda:
 #FROM continuumio/miniconda3
 
-LABEL Name=movies Version=0.0.1
+LABEL Name=file_manager Version=0.0.1
 EXPOSE 5000
 
 WORKDIR /app
@@ -18,7 +18,7 @@ ADD . /app
 RUN python3 -m pip install -r requirements.txt
 RUN chmod 777 -R /app
 #RUN flask run --cert=adhoc
-#CMD ["python3", "./movies.py"]
+#CMD ["python3", "./main.py"]
 
 # Using pipenv:
 #RUN python3 -m pip install pipenv

@@ -6,12 +6,14 @@ from werkzeug.utils import secure_filename
 import json
 from shutil import copyfile
 from models.FileManager import FileManager
+from models.FtpManager import FtpManager
 import smtplib
 from libraries.ErrorNotification import ErrorNotification
 from ftplib import FTP
 
 app = Flask(__name__)
 fileManager = FileManager()
+FtpManager = FtpManager()
 
 @app.route('/', methods=['GET'])
 def index():
@@ -67,15 +69,9 @@ def checksum():
 @app.route('/file/serve2Ftp', methods=['GET'])
 def serve2Ftp():
 	try:
-		ftp = FTP('pureftpd')
-		ftp.login('kev', '123456')
-
-		filePath = '/app/filesystem/1.txt'
-		fp = open(filePath, 'rb')
-		ftp.storbinary('STOR %s' % os.path.basename(filePath), fp, 1024)
-		fp.close()
-		response = 'ok'
+		return True
 		success = True
+		response = FtpManager.serve2Ftp('santa_monica.jpg')
 		return formatResponse(response, success)
 	except Exception as e:
 		success = False
