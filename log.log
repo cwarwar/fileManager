@@ -1,2 +1,0 @@
-root - INFO - Source: /app/filesystem/1.txt ----- Destiny: /app/filesystem/primeiro/segundo/terceiro/1.txt ----- Checksum: 8cf23ffdda886ba3da8b957775a1cf7d
-werkzeug - INFO - 172.18.0.1 - - [28/Sep/2019 17:32:44] "POST /file/copy HTTP/1.1" 200 -

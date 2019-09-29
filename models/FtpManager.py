@@ -2,6 +2,7 @@ import os
 import hashlib
 import logging
 from ftplib import FTP
+from filelock import Timeout, FileLock
 from constants import FILESYSTEM
 
 class FtpManager:
@@ -17,11 +18,14 @@ class FtpManager:
 
     def serve2Ftp(self, source):
         source = FILESYSTEM()+source
+
+        if not os.path.exists(source):
+            raise Exception('O arquivo não existe')
         try:
             fp = open(source, 'rb')
             self.ftp.storbinary('STOR %s' % os.path.basename(source), fp, 1024)
             fp.close()
-            return 'Ok'
+            return source
         except:
             raise Exception('Não foi possível mover o arquivo no ftp')
         finally:

@@ -6,7 +6,7 @@ class ErrorNotification:
 	port = 587
 	sender = 'suportetecnico.globo@gmail.com'
 	password = 'K63,}<7tSt7CAwYk'
-	recipient = 'caio_warwar@yahoo.com.br'
+	recipient = 'suportetecnico.globo@gmail.com'
 
 	def __init__(self):
 		self.server = smtplib.SMTP(self.smtp, self.port)

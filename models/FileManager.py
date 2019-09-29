@@ -4,10 +4,10 @@ import logging
 from shutil import copyfile, move
 from filelock import Timeout, FileLock
 from constants import FILESYSTEM
+from time import sleep
+import sys
 
 class FileManager:
-
-    #root = '/app/filesystem/'
 
     def __init__(self):
         logging.basicConfig(filename='log.log', 
@@ -41,10 +41,17 @@ class FileManager:
 
         checksum = self.get_checksum(source)
 
-        if move_file:
-            move(file_path, final_path)
-        else:
-            copyfile(file_path, final_path)
+        lock = FileLock(file_path+'.lock', timeout=10)
+        try:
+            with lock.acquire(timeout=2):
+                if move_file:
+                    move(file_path, final_path)
+                else:
+                    copyfile(file_path, final_path)
+                lock.release()
+                os.remove(file_path+'.lock')
+        except Timeout:
+            return 'Timeout, o arquivo esta travado'
 
         logging.info('Source: '+file_path+' ----- Destiny: '+final_path+' ----- Checksum: '+checksum)
 
@@ -59,7 +66,14 @@ class FileManager:
 
         checksum = self.get_checksum(source)
 
-        os.remove(file_path)
+        lock = FileLock(file_path+'.lock', timeout=10)
+        try:
+            with lock.acquire(timeout=2):
+                os.remove(file_path)
+                lock.release()
+                os.remove(file_path+'.lock')
+        except Timeout:
+            return 'Timeout, o arquivo esta travado'
 
         logging.info('Removed: '+file_path)
         
