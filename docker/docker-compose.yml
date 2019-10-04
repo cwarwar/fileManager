@@ -37,5 +37,9 @@ services:
       - ./data/pure-ftpd:/etc/pure-ftpd
     privileged: true
     restart: always
+    networks:
+      my-network:
+        aliases:
+        - pureftpd
 networks:
     my-network:
