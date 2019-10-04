@@ -1,6 +1,17 @@
 version: '2.1'
 
 services:
+  nginx:
+      image: nginx:1.13.7
+      container_name: nginx
+      depends_on:
+          - file_manager
+      volumes:
+          - ./ngnix/nginx.conf:/etc/nginx/conf.d/default.conf
+      networks:
+          - my-network
+      ports:
+          - 80:80
   file_manager:
     image: file_manager
     build: .
@@ -8,15 +19,14 @@ services:
      - pureftpd
     volumes:
       - ../:/app
-    ports:
-      - 8888:5000
-    entrypoint:
-      - flask
-      - run
-      - --host=0.0.0.0
     environment:
       FLASK_DEBUG: 1
       FLASK_APP: ./main.py
+    command: flask run --host=0.0.0.0
+    networks:
+      my-network:
+        aliases:
+        - flask-app
   pureftpd:
     build: pureftpd
     container_name: pureftpd
@@ -27,3 +37,5 @@ services:
       - ./data/pure-ftpd:/etc/pure-ftpd
     privileged: true
     restart: always
+networks:
+    my-network:
